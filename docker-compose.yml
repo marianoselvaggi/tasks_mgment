@@ -1,0 +1,17 @@
+version: '3'
+services:
+  olive-postgres:
+    image: postgres:11
+    ports:
+      - 5434:5432
+    volumes:
+      - ./db-data:/var/lib/postgresql/lithium-data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=nextjs_task_mangement
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
