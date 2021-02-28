@@ -1,2 +1,11 @@
+server:
+  origin: '*/*'
+
 db:
+  host: 'localhost'
+  username: 'postgres'
+  password: 'postgres'
   syncronize: false
+
+jwt:
+  secret: 'topSecret51'

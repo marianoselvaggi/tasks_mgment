@@ -3,7 +3,7 @@ server:
 
 db:
   type: 'postgres'
-  port: 5432
+  port: 5434
   database: 'nextjs_task_mangement'
 
 jwt:
