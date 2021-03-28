@@ -1,9 +1,9 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
 import { ProductType } from './product-type.enum';
 import { User } from '../auth/user.entity';
 
 @Entity()
-export class Product {
+export class Product extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: Number;
 
@@ -16,7 +16,7 @@ export class Product {
     @Column()
     price: Number;
 
-    @ManyToMany(type => User, user => user.products)
+    @ManyToMany(type => User)
     @JoinTable()
-    users: User[];
+    users: User[]
 };
