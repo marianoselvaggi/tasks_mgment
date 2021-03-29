@@ -5,6 +5,7 @@ import { FilterProductDto } from './dto/filter-product-dto';
 import { CreateProductDTO } from './dto/create-product-dto';
 import { Product } from './product.entity';
 import { User } from '../auth/user.entity';
+import { ProductType } from './product-type.enum';
 
 @Injectable()
 export class ProductsService {
@@ -41,5 +42,9 @@ export class ProductsService {
 
     async deleteProduct(id: Number, user: User): Promise<void> {
         return this.productRepository.deleteProduct(id,user);
+    }
+
+    async updateProductType(id: Number, type: ProductType, user: User): Promise<Product> {
+        return this.productRepository.updateProductType(id,type,user);
     }
 }

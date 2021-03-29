@@ -4,6 +4,7 @@ import { FilterProductDto } from './dto/filter-product-dto';
 import { Logger, NotFoundException } from '@nestjs/common';
 import { CreateProductDTO } from './dto/create-product-dto';
 import { User } from '../auth/user.entity';
+import { ProductType } from './product-type.enum';
 
 @EntityRepository(Product)
 export class ProductRepository extends Repository<Product> {
@@ -52,16 +53,30 @@ export class ProductRepository extends Repository<Product> {
     }
 
     async deleteProduct(id: Number, user: User) {
-        const userId = user.id;
         const query = this.createQueryBuilder('product');
         query.innerJoinAndSelect('product.users','user');
         query.andWhere('product.id = :id', { id });
-        query.andWhere('user.id = :userId', { userId });
+        query.andWhere('user.id = :userId', { userId: user.id });
         query.select('product.id');
         const product = await query.getOne(); 
         if (!product) {
-            throw new NotFoundException(`The product with id "${id}" does not exist.`);
+            throw new NotFoundException(`The product with id "${id}" does not exist for the user "${user.id}".`);
         }
         await product.remove();
+    }
+
+    async updateProductType(id: Number, type: ProductType, user:User): Promise<Product> {
+        const query = this.createQueryBuilder('product');
+        query.innerJoinAndSelect('product.users','user');
+        query.andWhere('product.id = :id', { id });
+        query.andWhere('user.id = :userId', { userId: user.id });
+        query.select('product.id');
+        const product = await query.getOne(); 
+        if (!product) {
+            throw new NotFoundException(`The product with id "${id}" does not exist for the user "${user.id}".`);
+        }
+        product.type = type;
+        await product.save();
+        return product;
     }
 };

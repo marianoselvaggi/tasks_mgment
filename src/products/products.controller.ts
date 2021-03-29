@@ -1,10 +1,12 @@
-import { Controller, Get, Logger, Param, ParseIntPipe, Post, Query, UsePipes, ValidationPipe, Body, UseGuards, Delete } from '@nestjs/common';
+import { Controller, Get, Logger, Param, ParseIntPipe, Post, Query, UsePipes, ValidationPipe, Body, UseGuards, Delete, Patch } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { FilterProductDto } from './dto/filter-product-dto';
 import { CreateProductDTO } from './dto/create-product-dto';
 import { Product } from './product.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/get-user.decorator';
+import { ProductType } from './product-type.enum';
+import { ProductTypeValidationPipe } from './pipes/product-status-validation.pipe';
 
 @Controller('products')
 @UseGuards(AuthGuard())
@@ -43,5 +45,14 @@ export class ProductsController {
         @GetUser() user
     ): Promise<void> {
         return this.productsService.deleteProduct(id,user);
+    }
+
+    @Patch('/:id')
+    updateProductType(
+        @Param('id', ParseIntPipe) id: Number,
+        @Query('type', ProductTypeValidationPipe) type: ProductType,
+        @GetUser() user
+    ): Promise<Product> {
+        return this.productsService.updateProductType(id,type,user);
     }
 }
