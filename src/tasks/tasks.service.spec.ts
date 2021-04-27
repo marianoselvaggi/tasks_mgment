@@ -6,7 +6,6 @@ import { TaskStatus } from './task-status.enum';
 import { User } from '../auth/user.entity';
 import { NotFoundException } from '@nestjs/common';
 import { CreateTaskDTO } from './dto/create-task.dto';
-import { Task } from './task.entity';
 
 const mockUser: User = new User();
 mockUser.username = 'Test User';
